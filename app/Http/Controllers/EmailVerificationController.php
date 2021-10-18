@@ -68,7 +68,7 @@ class EmailVerificationController extends Controller
         catch(\Exception $e)
         {
             // response
-            $this->respondWithError(['message' => $e->getMessage()]);
+            return $this->respondWithError(['message' => $e->getMessage()]);
         }
     }
 
@@ -133,7 +133,7 @@ class EmailVerificationController extends Controller
         catch(\Exception $e)
         {
             // response
-            $this->respondWithError(['message' => $e->getMessage()]);
+            return $this->respondWithError(['message' => $e->getMessage()]);
         }
     }
 
@@ -199,7 +199,7 @@ class EmailVerificationController extends Controller
         catch(\Exception $e)
         {
             // response
-            $this->respondWithError(['message' => $e->getMessage()]);
+            return $this->respondWithError(['message' => $e->getMessage()]);
         }
     }
 }
