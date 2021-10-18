@@ -20,5 +20,6 @@ Route::prefix('v1')->group(function (){
     Route::prefix('/account')->group(function (){
         Route::post('/invite', 'EmailVerificationController@invite')->name('v1.account.invite');
         Route::post('/create/{email}', 'EmailVerificationController@create')->name('v1.account.create');
+        Route::post('/verify/{email}', 'EmailVerificationController@verify')->name('v1.account.verify');
     });
 });
