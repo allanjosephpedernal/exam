@@ -136,4 +136,70 @@ class EmailVerificationController extends Controller
             $this->respondWithError(['message' => $e->getMessage()]);
         }
     }
+
+    /**
+     * Verify account in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  String  $email
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function verify(Request $request, $email): JsonResponse
+    {
+        try
+        {
+            // get error
+            $error = static::validateRequest(
+                \Validator::make($request->all(), [
+                    'pin' => 'required|int'
+                ])
+            );
+
+            // count error
+            if (count($error) > 0)
+            {
+                // response
+                return $this->respondWithError($error);
+            }
+
+            // extract all
+            extract($request->all());
+
+            // start transaction
+            \DB::beginTransaction();
+                
+                // decrypt email
+                $email = Crypt::decryptString($email);
+
+                // get user
+                $user = User::where('email',$email)->firstOrFail();
+
+                // validate pin
+                if($user->pin!=$pin)
+                {
+                    // response
+                    return $this->respondWithError(['nessage' => 'Incorrect pin please try again!']);
+                }
+
+                // update registered at
+                $user->registered_at = Carbon::now();
+                $user->email_verified_at = Carbon::now();
+                $user->save();
+
+            // commit transaction
+            \DB::commit();
+
+            // response
+            return $this->respondWithSuccess([
+                'token' => $user->createToken('access')->plainTextToken,
+                'user' => $user
+            ]);
+        }
+        catch(\Exception $e)
+        {
+            // response
+            $this->respondWithError(['message' => $e->getMessage()]);
+        }
+    }
 }
