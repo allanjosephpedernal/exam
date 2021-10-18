@@ -19,11 +19,11 @@ class CreateUsersTable extends Migration
             $table->string('user_name',20)->nullable()->default(NULL);
             $table->string('avatar')->nullable()->default(NULL);
             $table->string('email')->unique()->nullable()->default(NULL);
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->timestamp('email_verified_at')->nullable()->default(NULL);
+            $table->string('password')->nullable()->default(NULL);
             $table->string('pin',6)->nullable()->default(NULL);
-            $table->rememberToken();
-            $table->enum('user_role',['admin','user'])->nullable()->default(NULL);
+            $table->rememberToken()->nullable()->default(NULL);
+            $table->enum('user_role',['admin','user'])->nullable()->default('user');
             $table->datetime('registered_at')->nullable()->default(NULL);
             $table->timestamps();
         });
