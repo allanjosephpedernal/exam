@@ -9,6 +9,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Crypt;
 use Carbon\Carbon;
 
+use App\Mail\InvitationLink;
+use App\Mail\CreateAccount;
+
 use App\Models\User;
 
 class EmailVerificationController extends Controller
