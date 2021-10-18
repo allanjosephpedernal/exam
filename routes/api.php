@@ -33,5 +33,10 @@ Route::prefix('v1')->group(function (){
         Route::prefix('/auth')->group(function(){
             Route::post('/logout','AuthController@logout')->name('v1.auth.logout');
         });
+
+        // profile
+        Route::prefix('/profile')->group(function(){
+            Route::post('/{id}','ProfileController@update')->name('v1.profile.update');
+        });
     });
 });
