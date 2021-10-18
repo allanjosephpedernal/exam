@@ -71,4 +71,69 @@ class EmailVerificationController extends Controller
             $this->respondWithError(['message' => $e->getMessage()]);
         }
     }
+
+    /**
+     * Create a newly registered account in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  String  $email
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function create(Request $request, $email): JsonResponse
+    {
+        try
+        {
+            // get error
+            $error = static::validateRequest(
+                \Validator::make($request->all(), [
+                    'user_name' => 'required|min:4|max:20',
+                    'password' => 'required'
+                ])
+            );
+
+            // count error
+            if (count($error) > 0)
+            {
+                // response
+                return $this->respondWithError($error);
+            }
+
+            // extract all
+            extract($request->all());
+
+            // start transaction
+            \DB::beginTransaction();
+
+                // decrypt email
+                $email = Crypt::decryptString($email);
+
+                // get 6 digit pin
+                $pin = mt_rand(100000,999999);
+
+                // update user
+                $user = User::where('email',$email)->firstOrFail();
+                $user->user_name = $user_name;
+                $user->password = \Hash::make($password);
+                $user->pin = $pin; // random 6 digit pin
+                $user->save();
+
+                // send 6 digit pin email
+                //\Mail::to($email)->send(new CreateAccount($pin));
+
+            // commit transaction
+            \DB::commit();
+
+            // response
+            return $this->respondWithSuccess([
+                'pin' => $pin,
+                'message' => 'Your 6 digit pin is successfully sent!'
+            ]);
+        }
+        catch(\Exception $e)
+        {
+            // response
+            $this->respondWithError(['message' => $e->getMessage()]);
+        }
+    }
 }
