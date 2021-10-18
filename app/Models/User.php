@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const AVATAR_PATH = 'avatar';
+
     /**
      * The attributes that are mass assignable.
      *
