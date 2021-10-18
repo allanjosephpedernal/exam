@@ -2,7 +2,14 @@
 
 namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Crypt;
+use Carbon\Carbon;
+
+use App\Models\User;
 
 class EmailVerificationController extends Controller
 {
