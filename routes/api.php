@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// v1
+Route::prefix('v1')->group(function (){
+    // account
+    Route::prefix('/account')->group(function (){
+        Route::post('/invite', 'EmailVerificationController@invite')->name('v1.account.invite');
+        Route::post('/create/{email}', 'EmailVerificationController@create')->name('v1.account.create');
+    });
 });
