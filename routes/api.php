@@ -22,4 +22,16 @@ Route::prefix('v1')->group(function (){
         Route::post('/create/{email}', 'EmailVerificationController@create')->name('v1.account.create');
         Route::post('/verify/{email}', 'EmailVerificationController@verify')->name('v1.account.verify');
     });
+
+    // auth
+    Route::prefix('/auth')->group(function(){
+        Route::post('/login','AuthController@login')->name('v1.auth.login');
+    });
+
+    Route::middleware(['auth:sanctum'])->group(function(){
+        // auth
+        Route::prefix('/auth')->group(function(){
+            Route::post('/logout','AuthController@logout')->name('v1.auth.logout');
+        });
+    });
 });
